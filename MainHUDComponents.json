@@ -3,15 +3,15 @@
   "DrawableInfo": {
     "global": [
       {
-        "Type": "osu.Game.Skinning.LegacyScoreCounter, osu.Game, Version=2026.418.0.0, Culture=neutral, PublicKeyToken=null",
+        "Type": "osu.Game.Skinning.LegacyScoreCounter, osu.Game, Version=2026.429.0.0, Culture=neutral, PublicKeyToken=null",
         "Position": {
-          "x": 0.0,
-          "y": 0.0
+          "x": -0.5324707,
+          "y": 2.9578857
         },
         "Rotation": 0.0,
         "Scale": {
-          "x": 0.96,
-          "y": 0.96
+          "x": 0.90670514,
+          "y": 0.90670514
         },
         "Width": null,
         "Height": null,
@@ -22,7 +22,7 @@
         "Children": []
       },
       {
-        "Type": "osu.Game.Skinning.LegacyAccuracyCounter, osu.Game, Version=2026.418.0.0, Culture=neutral, PublicKeyToken=null",
+        "Type": "osu.Game.Skinning.LegacyAccuracyCounter, osu.Game, Version=2026.429.0.0, Culture=neutral, PublicKeyToken=null",
         "Position": {
           "x": 0.0,
           "y": 53.28006
@@ -43,26 +43,7 @@
         "Children": []
       },
       {
-        "Type": "osu.Game.Skinning.LegacySongProgress, osu.Game, Version=2026.418.0.0, Culture=neutral, PublicKeyToken=null",
-        "Position": {
-          "x": -159.69592,
-          "y": 74.44813
-        },
-        "Rotation": 0.0,
-        "Scale": {
-          "x": 1.0,
-          "y": 1.0
-        },
-        "Width": null,
-        "Height": null,
-        "Anchor": 33,
-        "Origin": 34,
-        "UsesFixedAnchor": true,
-        "Settings": {},
-        "Children": []
-      },
-      {
-        "Type": "osu.Game.Screens.Play.HUD.HitErrorMeters.BarHitErrorMeter, osu.Game, Version=2026.418.0.0, Culture=neutral, PublicKeyToken=null",
+        "Type": "osu.Game.Screens.Play.HUD.HitErrorMeters.BarHitErrorMeter, osu.Game, Version=2026.429.0.0, Culture=neutral, PublicKeyToken=null",
         "Position": {
           "x": 0.0,
           "y": 0.0
@@ -87,39 +68,63 @@
         "Children": []
       },
       {
-        "Type": "osu.Game.Screens.Play.HUD.ArgonHealthDisplay, osu.Game, Version=2026.418.0.0, Culture=neutral, PublicKeyToken=null",
+        "Type": "osu.Game.Screens.Play.HUD.ArgonHealthDisplay, osu.Game, Version=2026.429.0.0, Culture=neutral, PublicKeyToken=null",
         "Position": {
-          "x": -118.879486,
-          "y": 9.152725
+          "x": -168.6524,
+          "y": 9.777969
         },
         "Rotation": 0.0,
         "Scale": {
-          "x": 0.7717347,
-          "y": 0.7717347
+          "x": 1.0763426,
+          "y": 1.0763426
         },
-        "Width": 0.98,
+        "Width": 0.78517485,
         "Height": null,
-        "Anchor": 17,
-        "Origin": 17,
+        "Anchor": 33,
+        "Origin": 33,
         "UsesFixedAnchor": false,
         "Settings": {
-          "bar_height": 20.0,
+          "bar_height": 50.0,
           "use_relative_size": true
+        },
+        "Children": []
+      },
+      {
+        "Type": "osu.Game.Screens.Play.HUD.ArgonSongProgress, osu.Game, Version=2026.429.0.0, Culture=neutral, PublicKeyToken=null",
+        "Position": {
+          "x": -8.34903,
+          "y": 119.59755
+        },
+        "Rotation": 270.0,
+        "Scale": {
+          "x": 0.62472147,
+          "y": 0.62472147
+        },
+        "Width": 1160.1887,
+        "Height": null,
+        "Anchor": 33,
+        "Origin": 36,
+        "UsesFixedAnchor": false,
+        "Settings": {
+          "show_graph": true,
+          "show_time": true,
+          "use_relative_size": false,
+          "accent_colour": "#FFFFFF"
         },
         "Children": []
       }
     ],
     "mania": [
       {
-        "Type": "osu.Game.Rulesets.Mania.Skinning.Legacy.LegacyManiaComboCounter, osu.Game.Rulesets.Mania, Version=2026.418.0.0, Culture=neutral, PublicKeyToken=null",
+        "Type": "osu.Game.Rulesets.Mania.Skinning.Legacy.LegacyManiaComboCounter, osu.Game.Rulesets.Mania, Version=2026.429.0.0, Culture=neutral, PublicKeyToken=null",
         "Position": {
-          "x": 368.6833,
-          "y": 706.13354
+          "x": -329.31494,
+          "y": 761.1881
         },
         "Rotation": 0.0,
         "Scale": {
-          "x": 1.0,
-          "y": 1.0
+          "x": 0.7389276,
+          "y": 0.7389276
         },
         "Width": null,
         "Height": null,
@@ -130,7 +135,7 @@
         "Children": []
       },
       {
-        "Type": "osu.Game.Screens.Play.HUD.SpectatorList, osu.Game, Version=2026.418.0.0, Culture=neutral, PublicKeyToken=null",
+        "Type": "osu.Game.Screens.Play.HUD.SpectatorList, osu.Game, Version=2026.429.0.0, Culture=neutral, PublicKeyToken=null",
         "Position": {
           "x": 10.0,
           "y": -10.0
@@ -149,10 +154,10 @@
         "Children": []
       },
       {
-        "Type": "osu.Game.Screens.Play.HUD.DrawableGameplayLeaderboard, osu.Game, Version=2026.418.0.0, Culture=neutral, PublicKeyToken=null",
+        "Type": "osu.Game.Screens.Play.HUD.DrawableGameplayLeaderboard, osu.Game, Version=2026.429.0.0, Culture=neutral, PublicKeyToken=null",
         "Position": {
-          "x": 10.000061,
-          "y": -10.515808
+          "x": 5.4029846,
+          "y": -163.13887
         },
         "Rotation": 0.0,
         "Scale": {
@@ -166,6 +171,31 @@
         "UsesFixedAnchor": true,
         "Settings": {
           "collapse_during_gameplay": true
+        },
+        "Children": []
+      },
+      {
+        "Type": "osu.Game.Skinning.Components.ArgonJudgementCounterDisplay, osu.Game, Version=2026.429.0.0, Culture=neutral, PublicKeyToken=null",
+        "Position": {
+          "x": -21.513641,
+          "y": -30.811447
+        },
+        "Rotation": 0.0,
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0
+        },
+        "Width": null,
+        "Height": null,
+        "Anchor": 36,
+        "Origin": 36,
+        "UsesFixedAnchor": false,
+        "Settings": {
+          "wireframe_opacity": 0.05,
+          "show_label": false,
+          "show_max_judgement": true,
+          "mode": 0,
+          "flow_direction": 1
         },
         "Children": []
       }

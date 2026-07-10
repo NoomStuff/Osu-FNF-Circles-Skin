@@ -6,7 +6,8 @@ What this script does:
 2. Rebuilds trimmed frames using frameX/frameY/frameWidth/frameHeight when present.
 3. Applies Psych Engine runtime RGBPalette recoloring per direction.
 4. Fits and centers sprites to match current Circle Fullsize dimensions.
-5. Exports finished assets to /convert.
+5. Generates circle-shaped osu!mania hit lighting.
+6. Exports finished assets to /convert.
 
 Psych Engine references used:
 - backend/ClientPrefs.hx: default arrowRGB palette.
@@ -16,12 +17,13 @@ Psych Engine references used:
 from __future__ import annotations
 
 import argparse
+import math
 import shutil
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Dict, Tuple, cast
 
-from PIL import Image, ImageFilter
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 
 # Lane palettes (AARRGGBB): (main, highlight, shadow)
@@ -139,6 +141,89 @@ def apply_opacity(img: Image.Image, opacity: float) -> Image.Image:
     return rgba
 
 
+def scale_luminance(mask: Image.Image, strength: float) -> Image.Image:
+    """Scale a single-channel mask while preserving its luminance values."""
+    clamped = max(0.0, min(1.0, strength))
+    lut = [int(round(i * clamped)) for i in range(256)]
+    return mask.convert("L").point(lut)
+
+
+def generate_circle_lighting(*, hold: bool, pulse: float = 0.5) -> Image.Image:
+    """Generate additive tap flashes and hold rings for the circle receptors.
+
+    White is intentional: legacy hit lighting is a single shared texture rather
+    than a per-lane asset, so baking one lane colour into it would be incorrect.
+    """
+    scale = 4
+    width = 165 if hold else 285
+    height = 245 if hold else 333
+    clamped_pulse = max(0.0, min(1.0, pulse))
+    diameter = 52 if hold else 60
+    centre_x = width / 2
+    centre_y = (height / 2) - 24
+
+    mask = Image.new("L", (width * scale, height * scale), 0)
+    draw = ImageDraw.Draw(mask)
+    radius = diameter * scale / 2
+    cx = centre_x * scale
+    cy = centre_y * scale
+    bounds = (
+        int(round(cx - radius)),
+        int(round(cy - radius)),
+        int(round(cx + radius)),
+        int(round(cy + radius)),
+    )
+    draw.ellipse(bounds, fill=255)
+
+    if hold:
+        ring = Image.new("L", mask.size, 0)
+        ring_draw = ImageDraw.Draw(ring)
+        ring_draw.ellipse(bounds, outline=255, width=4 * scale)
+
+        halo = scale_luminance(
+            mask.filter(
+                ImageFilter.GaussianBlur(radius=(6 + (8 * clamped_pulse)) * scale)
+            ),
+            0.06 + (0.20 * clamped_pulse),
+        )
+        soft_ring = scale_luminance(
+            ring.filter(
+                ImageFilter.GaussianBlur(radius=(2 + (3 * clamped_pulse)) * scale)
+            ),
+            0.10 + (0.08 * clamped_pulse),
+        )
+        hard_ring = scale_luminance(
+            ring.filter(ImageFilter.GaussianBlur(radius=1.25 * scale)),
+            0.10 + (0.02 * clamped_pulse),
+        )
+        alpha = ImageChops.add(ImageChops.add(halo, soft_ring), hard_ring)
+    else:
+        peak_alpha = 61
+        falloff_radius = 28.0
+        alpha = Image.new("L", (width, height), 0)
+        alpha.putdata(
+            [
+                int(
+                    round(
+                        peak_alpha
+                        * math.exp(
+                            -math.hypot(x - centre_x, y - centre_y)
+                            / falloff_radius
+                        )
+                    )
+                )
+                for y in range(height)
+                for x in range(width)
+            ]
+        )
+
+    alpha = alpha.resize((width, height), Image.Resampling.LANCZOS)
+
+    glow = Image.new("RGBA", (width, height), (255, 255, 255, 0))
+    glow.putalpha(alpha)
+    return glow
+
+
 def hold_top_row_strip(hold_img: Image.Image) -> Image.Image:
     """Return a 1px-high strip from the top row for osu hold-stretch behavior."""
     rgba = hold_img.convert("RGBA")
@@ -201,10 +286,50 @@ def save_png(img: Image.Image, path: Path) -> None:
     img.save(path, "PNG")
 
 
-def save_png_with_2x(img: Image.Image, path: Path) -> None:
-    save_png(img, path)
+def ordered_dither_alpha(img: Image.Image, strength: float = 1.5) -> Image.Image:
+    """Dither low-alpha gradients with a stable 8x8 Bayer pattern."""
+    bayer_8x8 = (
+        (0, 48, 12, 60, 3, 51, 15, 63),
+        (32, 16, 44, 28, 35, 19, 47, 31),
+        (8, 56, 4, 52, 11, 59, 7, 55),
+        (40, 24, 36, 20, 43, 27, 39, 23),
+        (2, 50, 14, 62, 1, 49, 13, 61),
+        (34, 18, 46, 30, 33, 17, 45, 29),
+        (10, 58, 6, 54, 9, 57, 5, 53),
+        (42, 26, 38, 22, 41, 25, 37, 21),
+    )
+
+    rgba = img.convert("RGBA")
+    alpha = rgba.getchannel("A")
+    width, height = alpha.size
+    dithered = Image.new("L", alpha.size, 0)
+
+    for y in range(height):
+        for x in range(width):
+            value = int(alpha.getpixel((x, y)))
+            if value == 0:
+                continue
+
+            threshold = ((bayer_8x8[y % 8][x % 8] + 0.5) / 64.0) - 0.5
+            adjusted = round(value + (threshold * strength))
+            dithered.putpixel((x, y), max(0, min(255, adjusted)))
+
+    rgba.putalpha(dithered)
+    return rgba
+
+
+def save_png_with_2x(
+    img: Image.Image,
+    path: Path,
+    *,
+    dither_alpha: bool = False,
+) -> None:
+    sd = ordered_dither_alpha(img) if dither_alpha else img
+    save_png(sd, path)
     w, h = img.size
     img_2x = img.resize((w * 2, h * 2), Image.Resampling.LANCZOS)
+    if dither_alpha:
+        img_2x = ordered_dither_alpha(img_2x)
     save_png(img_2x, path.with_name(f"{path.stem}@2x{path.suffix}"))
 
 
@@ -304,6 +429,28 @@ def main() -> None:
         tail_mini_size,
         key_mini_size,
     )
+
+    save_png_with_2x(
+        generate_circle_lighting(hold=False),
+        out_root / "lightingN.png",
+        dither_alpha=True,
+    )
+    save_png_with_2x(
+        generate_circle_lighting(hold=True),
+        out_root / "lightingL.png",
+        dither_alpha=True,
+    )
+
+    hold_light_frame_count = 3
+    hold_light_pulse = (0.0, 0.75, 0.15)
+    for frame_index in range(hold_light_frame_count):
+        pulse = hold_light_pulse[frame_index]
+        frame = generate_circle_lighting(hold=True, pulse=pulse)
+        save_png_with_2x(
+            frame,
+            out_root / f"lightingL-{frame_index}.png",
+            dither_alpha=True,
+        )
 
     print(f"Done. Exported converted assets to: {out_root}")
 

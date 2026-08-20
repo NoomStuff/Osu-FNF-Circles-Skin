@@ -340,9 +340,21 @@ def clean_output(out_root: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Convert Psych chip note atlas to osu assets")
-    parser.add_argument("--xml", default="fnf-to-osu/NOTE_assets-chip.xml", help="Path to NOTE_assets-chip.xml")
-    parser.add_argument("--out", default="fnf-to-osu/convert", help="Output folder")
-    parser.add_argument("--root", default=".", help="Skin root (contains mania/) for reference sizes")
+    parser.add_argument(
+        "--xml",
+        default="NOTE_assets-chip.xml",
+        help="Path to NOTE_assets-chip.xml",
+    )
+    parser.add_argument(
+        "--out",
+        default="convert",
+        help="Output folder",
+    )
+    parser.add_argument(
+        "--root",
+        default=".",
+        help="Skin root (contains mania/) for reference sizes",
+    )
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
@@ -353,16 +365,11 @@ def main() -> None:
 
     atlas = Atlas(xml_path)
 
-    # Fixed export sizes (do not derive from existing files at runtime).
-    note_size = (125, 125)
-    hold_size = (125, 1)
-    tail_size = (125, 125)
-    key_size = (125, 175)
-
-    note_mini_size = (96, 96)
-    hold_mini_size = (96, 1)
-    tail_mini_size = (96, 96)
-    key_mini_size = (96, 128)
+    # Fixed export sizes
+    note_size = (96, 96)
+    hold_size = (96, 1)
+    tail_size = (96, 96)
+    key_size = (96, 128)
 
     # output_name, source_direction_name, source_color_name, source_xml_dir, palette
     lane_specs = [
@@ -421,14 +428,6 @@ def main() -> None:
         save_png_with_2x(key_base, key_dir / "key.png")
 
     emit_set(out_root / "notes", out_root / "keys", note_size, hold_size, tail_size, key_size)
-    emit_set(
-        out_root / "notesmini",
-        out_root / "keysmini",
-        note_mini_size,
-        hold_mini_size,
-        tail_mini_size,
-        key_mini_size,
-    )
 
     save_png_with_2x(
         generate_circle_lighting(hold=False),

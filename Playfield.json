@@ -1,6 +1,26 @@
 {
   "Version": 1,
   "DrawableInfo": {
-    "mania": []
+    "mania": [
+      {
+        "Type": "osu.Game.Rulesets.Mania.Skinning.Legacy.LegacyManiaComboCounter, osu.Game.Rulesets.Mania, Version=2026.804.2.0, Culture=neutral, PublicKeyToken=null",
+        "Position": {
+          "x": -282.77472,
+          "y": -77.15643
+        },
+        "Rotation": 0.0,
+        "Scale": {
+          "x": 0.7389276,
+          "y": 0.7389276
+        },
+        "Width": null,
+        "Height": null,
+        "Anchor": 20,
+        "Origin": 36,
+        "UsesFixedAnchor": true,
+        "Settings": {},
+        "Children": []
+      }
+    ]
   }
 }

@@ -1,7 +1,7 @@
 {
   "Version": 1,
   "DrawableInfo": {
-    "global": [
+    "mania": [
       {
         "Type": "osu.Game.Screens.Play.HUD.ArgonSongProgress, osu.Game, Version=2026.921.0.0, Culture=neutral, PublicKeyToken=null",
         "Position": {
@@ -112,9 +112,7 @@
           "use_relative_size": true
         },
         "Children": []
-      }
-    ],
-    "mania": [
+      },
       {
         "Type": "osu.Game.Screens.Play.HUD.SpectatorList, osu.Game, Version=2026.921.0.0, Culture=neutral, PublicKeyToken=null",
         "Position": {

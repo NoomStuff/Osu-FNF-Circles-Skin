@@ -3,21 +3,21 @@
   "DrawableInfo": {
     "mania": [
       {
-        "Type": "osu.Game.Rulesets.Mania.Skinning.Legacy.LegacyManiaComboCounter, osu.Game.Rulesets.Mania, Version=2026.804.2.0, Culture=neutral, PublicKeyToken=null",
+        "Type": "osu.Game.Rulesets.Mania.Skinning.Legacy.LegacyManiaComboCounter, osu.Game.Rulesets.Mania, Version=2026.921.0.0, Culture=neutral, PublicKeyToken=null",
         "Position": {
-          "x": -282.77472,
-          "y": -77.15643
+          "x": 1.3632812,
+          "y": -127.4671
         },
         "Rotation": 0.0,
         "Scale": {
-          "x": 0.7389276,
-          "y": 0.7389276
+          "x": 0.5668716,
+          "y": 0.5668716
         },
         "Width": null,
         "Height": null,
-        "Anchor": 20,
-        "Origin": 36,
-        "UsesFixedAnchor": true,
+        "Anchor": 18,
+        "Origin": 18,
+        "UsesFixedAnchor": false,
         "Settings": {},
         "Children": []
       }
